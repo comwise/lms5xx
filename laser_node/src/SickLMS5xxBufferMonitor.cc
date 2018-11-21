@@ -44,8 +44,11 @@ namespace SickToolbox {
     /* Flush the input buffer */
     uint8_t byte_buffer = 0;
     uint8_t payload_buffer[SickLMS5xxMessage::MESSAGE_PAYLOAD_MAX_LENGTH] = {0};
-    
-    try {
+    uint32_t payload_length = 0;
+
+    try
+    {
+#if 0
 
       /* Flush the TCP receive buffer */
       // Don't flush! This is stupid. It causes races and makes the driver unreliable.
@@ -57,18 +60,15 @@ namespace SickToolbox {
          /* Grab the next byte from the stream */
          _readBytes(&byte_buffer,1,DEFAULT_SICK_LMS_5XX_BYTE_TIMEOUT);
 
-      }
-      while (byte_buffer != 0x02);
+      } while (byte_buffer != 0x02);
       
       /* Ok, now acquire the payload! (until ETX) */
-      int payload_length = 0;
       do {
 
         payload_length++;
          _readBytes(&payload_buffer[payload_length-1],1,DEFAULT_SICK_LMS_5XX_BYTE_TIMEOUT);
 
-      }
-      while (payload_buffer[payload_length-1] != 0x03);
+      } while (payload_buffer[payload_length-1] != 0x03);
       payload_length--;
       
       /* Build the return message object based upon the received payload
@@ -79,21 +79,57 @@ namespace SickToolbox {
       sick_message.BuildMessage(payload_buffer,payload_length);
 
       /* Success */
-      
+#else
+      fd_set rfds;
+      FD_ZERO(&rfds);
+      FD_SET(_sick_fd, &rfds);
+
+      // Block a total of up to 100ms waiting for more data from the laser.
+      while (1) {
+        // Would be great to depend on linux's behaviour of updating the timeval, but unfortunately
+        // that's non-POSIX (doesn't work on OS X, for example).
+        struct timeval tv;
+        tv.tv_sec = 0;
+        tv.tv_usec = DEFAULT_SICK_LMS_5XX_BYTE_TIMEOUT;
+
+        logDebug("entering select()", tv.tv_usec);
+        int retval = select(_sick_fd + 1, &rfds, NULL, NULL, &tv);
+        logDebug("returned %d from select()", retval);
+        if (retval) {
+
+          buffer_.readFrom(_sick_fd);
+
+          // Will return pointer if a complete message exists in the buffer,
+          // otherwise will return null.
+
+          char *buffer_data = buffer_.getNextBuffer(payload_length);
+          if (buffer_data && payload_length >= 2) {
+            sick_message.BuildMessage((uint8_t *)&buffer_data[1], payload_length - 2);
+            buffer_.popLastBuffer();
+            return;
+          }
+
+        } else {
+
+          // Select timed out or there was an fd error.
+          return;
+
+        }
+      }
+#endif
     }
-    
-    catch(SickTimeoutException &sick_timeout) { /* This is ok! */ }
-    
+    catch (SickTimeoutException &sick_timeout) { 
+      /* This is ok! */
+    }
     /* Catch any serious IO buffer exceptions */
-    catch(SickIOException &sick_io_exception) {
+    catch (SickIOException &sick_io_exception) {
       throw;
     }
-    
     /* A sanity check */
     catch (...) {
       throw;
     }
-    
+
   }
 
   /**

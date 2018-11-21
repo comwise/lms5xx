@@ -13,7 +13,6 @@
  * This software is released under a BSD Open-Source License.
  * See http://sicktoolbox.sourceforge.net
  */
-
 #ifndef SICK_LMS_5XX_HH
 #define SICK_LMS_5XX_HH
 
@@ -182,6 +181,9 @@ namespace SickToolbox {
     /** Utility function for converting scan frequency to integer */
     int SickScanFreqToInt( const sick_lms_5xx_scan_freq_t scan_freq ) const;
     
+    /** Utility function for converting int to scan resolution */
+    sick_lms_5xx_scan_res_t IntToSickScanRes( const int scan_res ) const;
+
     /** Utility function for converting double to scan resolution */
     sick_lms_5xx_scan_res_t DoubleToSickScanRes( const double scan_res ) const;
 
@@ -271,7 +273,7 @@ namespace SickToolbox {
                                   const std::string reply_command_code,
                                   const std::string reply_command,
                                   const unsigned int timeout_value = DEFAULT_SICK_LMS_5XX_MESSAGE_TIMEOUT,
-                                  const unsigned int num_tries = 1 ) throw( SickIOException, SickTimeoutException );
+                                  const unsigned int num_tries = 3 ) throw( SickIOException, SickTimeoutException );
 
     /** Receive a message */
     void _recvMessage( SickLMS5xxMessage &sick_message ) const throw ( SickTimeoutException );

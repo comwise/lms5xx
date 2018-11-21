@@ -19,12 +19,13 @@
 #define SICK_LMS_5xx_BUFFER_MONITOR_HH
 
 // Note: In contrast to the LMS2xx code, this value is used for receives only, not for sending.
-#define DEFAULT_SICK_LMS_5XX_BYTE_TIMEOUT         (100000)  ///< Max allowable time between consecutive bytes
+#define DEFAULT_SICK_LMS_5XX_BYTE_TIMEOUT         (500000)  ///< Max allowable time between consecutive bytes
 
 /* Definition dependencies */
 #include "SickLMS5xxMessage.hh"
 #include "SickBufferMonitor.hh"
 #include "SickException.hh"
+#include "lms_buffer.h"
 
 /* Associate the namespace */
 namespace SickToolbox {
@@ -49,6 +50,9 @@ namespace SickToolbox {
 
     /* A utility function for flushing the receive buffer */
     void _flushTCPRecvBuffer( ) const throw ( SickIOException );
+
+      /* receive buffer */
+      LMSBuffer buffer_;
     
   };
     

@@ -134,19 +134,19 @@ namespace SickToolbox {
 
       if (i == 1) {
       
-	/* Grab the command type */
-	if ((token = strtok((char *)&_message_buffer[1]," ")) == NULL) {
-	  throw SickIOException("SickLMS5xxMessage::ParseMessage: strtok() failed!");
-	}
+	      /* Grab the command type */
+	      if ((token = strtok((char *)&_message_buffer[1]," ")) == NULL) {
+	        throw SickIOException("SickLMS5xxMessage::ParseMessage: strtok() failed!");
+	      }
 	
-	_command_type = token;
+	      _command_type = token;
 	
-	/* Grab the Command Code */
-	if ((token = strtok(NULL," ")) == NULL) {
-	  throw SickIOException("SickLMS5xxMessage::ParseMessage: strtok() failed!");
-	}
+	      /* Grab the Command Code */
+	      if ((token = strtok(NULL," ")) == NULL) {
+	        throw SickIOException("SickLMS5xxMessage::ParseMessage: strtok() failed!");
+	      }
 	
-	_command = token;
+	      _command = token;
 	
       }
       
@@ -154,7 +154,7 @@ namespace SickToolbox {
 
       /* A sanity check */
       if (i > SickLMS5xxMessage::MESSAGE_MAX_LENGTH) {
-	throw SickIOException("SickLMS5xxMessage::ParseMessage: Message Exceeds Max Message Length!");
+	      throw SickIOException("SickLMS5xxMessage::ParseMessage: Message Exceeds Max Message Length!");
       }
       
     }

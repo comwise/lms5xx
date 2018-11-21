@@ -607,14 +607,16 @@ namespace SickToolbox {
    * \brief Convert integer to corresponding sick_lms_5xx_scan_freq_t
    */
   SickLMS5xx::sick_lms_5xx_scan_freq_t SickLMS5xx::IntToSickScanFreq( const int scan_freq ) const {
-          switch(scan_freq) {
-                  case 25:  return SICK_LMS_5XX_SCAN_FREQ_25;
-                  case 35:  return SICK_LMS_5XX_SCAN_FREQ_35;
-                  case 50:  return SICK_LMS_5XX_SCAN_FREQ_50;
-                  case 75:  return SICK_LMS_5XX_SCAN_FREQ_75;
-                  case 100: return SICK_LMS_5XX_SCAN_FREQ_100;
-                  default:  return SICK_LMS_5XX_SCAN_FREQ_UNKNOWN;
-          }
+
+    switch(scan_freq) {
+      case 25:  return SICK_LMS_5XX_SCAN_FREQ_25;
+      case 35:  return SICK_LMS_5XX_SCAN_FREQ_35;
+      case 50:  return SICK_LMS_5XX_SCAN_FREQ_50;
+      case 75:  return SICK_LMS_5XX_SCAN_FREQ_75;
+      case 100: return SICK_LMS_5XX_SCAN_FREQ_100;
+      default:  return SICK_LMS_5XX_SCAN_FREQ_UNKNOWN;
+    }
+
   }
 
   /**
@@ -640,24 +642,46 @@ namespace SickToolbox {
   }
   
   /**
+   * \brief Convert int to corresponding sick_lms_5xx_scan_res_t
+   */
+  SickLMS5xx::sick_lms_5xx_scan_res_t SickLMS5xx::IntToSickScanRes( const int scan_res ) const {
+    if(scan_res == 1667)
+      return SICK_LMS_5XX_SCAN_RES_17;
+    else if(scan_res == 2500  )
+      return SICK_LMS_5XX_SCAN_RES_25;
+    else if(scan_res == 3333  )
+      return SICK_LMS_5XX_SCAN_RES_33;
+    else if(scan_res == 5000  )
+      return SICK_LMS_5XX_SCAN_RES_50;
+    else if(scan_res == 6667  )
+      return SICK_LMS_5XX_SCAN_RES_67;
+    else if(scan_res == 7500  )
+      return SICK_LMS_5XX_SCAN_RES_75;
+    else if(scan_res == 10000 )
+      return SICK_LMS_5XX_SCAN_RES_100;
+    return SICK_LMS_5XX_SCAN_RES_UNKNOWN;
+  } 
+
+  /**
    * \brief Convert double to corresponding sick_lms_5xx_scan_res_t
    */
   SickLMS5xx::sick_lms_5xx_scan_res_t SickLMS5xx::DoubleToSickScanRes( const double scan_res ) const {
-          if(scan_res == 0.1667)
-                  return SICK_LMS_5XX_SCAN_RES_17;
-          else if(scan_res == 0.25  )
-                  return SICK_LMS_5XX_SCAN_RES_25;
-          else if(scan_res == 0.3333)
-                  return SICK_LMS_5XX_SCAN_RES_33;
-          else if(scan_res == 0.5   )
-                  return SICK_LMS_5XX_SCAN_RES_50;
-          else if(scan_res == 0.6667)
-                  return SICK_LMS_5XX_SCAN_RES_67;
-          else if(scan_res == 0.75  )
-                  return SICK_LMS_5XX_SCAN_RES_75;
-          else if(scan_res == 1.0   )
-                  return SICK_LMS_5XX_SCAN_RES_100;
-          return SICK_LMS_5XX_SCAN_RES_UNKNOWN;
+
+    if(scan_res == 0.1667)
+            return SICK_LMS_5XX_SCAN_RES_17;
+    else if(scan_res == 0.25  )
+            return SICK_LMS_5XX_SCAN_RES_25;
+    else if(scan_res == 0.3333)
+            return SICK_LMS_5XX_SCAN_RES_33;
+    else if(scan_res == 0.5   )
+            return SICK_LMS_5XX_SCAN_RES_50;
+    else if(scan_res == 0.6667)
+            return SICK_LMS_5XX_SCAN_RES_67;
+    else if(scan_res == 0.75  )
+            return SICK_LMS_5XX_SCAN_RES_75;
+    else if(scan_res == 1.0   )
+            return SICK_LMS_5XX_SCAN_RES_100;
+    return SICK_LMS_5XX_SCAN_RES_UNKNOWN;
   }  
 
   /**
@@ -682,7 +706,8 @@ namespace SickToolbox {
           return 1.0;
         default:
           return -1;
-    }  
+    }
+
   }
   
   /**

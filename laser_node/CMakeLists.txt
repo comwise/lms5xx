@@ -107,6 +107,8 @@ catkin_package(
 ## Build ##
 ###########
 
+set(CMAKE_CXX_FLAGS "-std=c++11")
+
 #link_directories(/home/tinkerbox/catkin_ws/devel/lib/)
 
 ## Specify additional locations of header files
